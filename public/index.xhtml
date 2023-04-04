@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" role="application">
+    <head>
+        <title>x86Pumahat</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="hint.min.css" />
+        <script src="ast.js"></script>
+        <script src="interprete.js"></script>
+        <script src="cadenas.js"></script>
+        <script src="inicial.js" defer="defer"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        <header>
+            <h1>x86Pumahat</h1>
+            <input type="file" id="archivo" hidden="hidden" aria-labelledby="btnAbrir" accept=".asmx" />
+            <ul aria-label="Acciones">
+                <li><button id="btnEjecutar">Ejecutar</button></li>
+                <li><button id="btnResumir">Continuar ejecución</button></li>
+                <li><button id="btnDetener">Detener ejecución</button></li>
+                <li><button id="btnAbrir">Abrir archivo</button></li>
+                <li><button id="btnGuardar">Guardar archivo</button></li>
+                <li><button id="btnCerrar" aria-label="Elimina el código, borra la memoria a ceros, y restaura los valores predeterminados de los registros">Cerrar archivo</button></li>
+                <li><button id="btnOpc">Opciones</button></li>
+            </ul>
+            <ul>
+                <li><a href="https://lidsol.org/courses/pumahat/">PumaHat</a></li><!--
+                <li><a href="#">Comentarios</a></li>-->
+                <li><a href="https://gitlab.com/twilight1794/x86pumahat/issues">Problemas</a></li>
+                <li><a href="https://gitlab.com/twilight1794/x86pumahat">Repositorio</a></li>
+            </ul>
+        </header>
+        <main>
+            <details open="open" id="r-cod">
+                <summary>Código</summary>
+                <ol>
+                    <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">mov al, 2</span></li>
+                    <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">add [170], al</span></li>
+                    <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">mov al, 3</span></li>
+                    <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">add [170], al</span></li>
+                </ol>
+            </details>
+            <details open="open" id="r-mem">
+                <summary>Memoria</summary>
+                <div><label for="locdir">Ir a: </label><input type="text" id="locdir" pattern="[A-Fa-f0-9]+" placeholder="0x..." /><button>Ir</button></div>
+                <ol>
+                </ol>
+            </details>
+            <details open="open" id="r-ip">
+                <summary>Puntero de instrucción</summary>
+                <table>
+                    <tr><th colspan="2" id="t-eip">EIP</th></tr>
+                    <tr><th></th><th id="t-ip">IP</th></tr>
+                    <tr><td id="v-eip">0000</td><td id="v-ip">0000</td></tr>
+                </table>
+            </details>
+            <details open="open" id="r-rpg">
+                <summary>Registros de propósito general</summary>
+                <table>
+                    <tr><th colspan="4" id="t-eax">EAX</th><th colspan="4" id="t-ecx">ECX</th><th colspan="4" id="t-edx">EDX</th><th colspan="4" id="t-ebx">EBX</th></tr>
+                    <tr><th colspan="2" rowspan="2"></th><th colspan="2" id="t-ax">AX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-cx">CX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-dx">DX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-bx">BX</th></tr>
+                    <tr><th id="t-ah">AH</th><th id="t-al">AL</th><th id="t-ch">CH</th><th id="t-cl">CL</th><th id="t-dh">DH</th><th id="t-dl">DL</th><th id="t-bh">BH</th><th id="t-bl">BL</th></tr>
+                    <tr><td id="v-eah">00</td><td id="v-eal">00</td><td id="v-ah">00</td><td id="v-al">00</td><td id="v-ech">00</td><td id="v-ecl">00</td><td id="v-ch">00</td><td id="v-cl">00</td><td id="v-edh">00</td><td id="v-edl">00</td><td id="v-dh">00</td><td id="v-dl">00</td><td id="v-ebh">00</td><td id="v-ebl">00</td><td id="v-bh">00</td><td id="v-bl">00</td></tr>
+                    <tr><th colspan="4" id="t-esp">ESP</th><th colspan="4" id="t-ebp">EBP</th><th colspan="4" id="t-edi">EDI</th><th colspan="4" id="t-esi">ESI</th></tr>
+                    <tr><th colspan="2"></th><th colspan="2" id="t-sp">SP</th><th colspan="2"></th><th colspan="2" id="t-bp">BP</th><th colspan="2"></th><th colspan="2" id="t-di">DI</th><th colspan="2"></th><th colspan="2" id="t-si">SI</th></tr>
+                    <tr><td colspan="2" id="v-esp">0000</td><td colspan="2" id="v-sp">0000</td><td colspan="2" id="v-ebp">0000</td><td colspan="2" id="v-bp">0000</td><td colspan="2" id="v-edi">0000</td><td colspan="2" id="v-di">0000</td><td colspan="2" id="v-esi">0000</td><td colspan="2" id="v-si">0000</td></tr>
+                </table>
+            </details>
+            <details open="open" id="r-seg">
+                <summary>Registros de segmento</summary>
+                <table>
+                    <tr><th id="t-cs">CS</th><th id="t-ds">DS</th><th id="t-es">ES</th><th id="t-fs">FS</th><th id="t-gs">GS</th><th id="t-ss">SS</th></tr>
+                    <tr><td id="v-cs">0000</td><td id="v-ds">0000</td><td id="v-es">0000</td><td id="v-fs">0000</td><td id="v-gs">0000</td><td id="v-ss">0000</td></tr>
+                </table>
+            </details>
+            <details open="open" id="r-f16">
+                <summary>Banderas (FLAGS)</summary>
+                <table>
+                    <tr><th data-pos="15">15</th><th data-pos="14">14</th><th data-pos="13">13</th><th data-pos="12">12</th><th data-pos="11">11</th><th data-pos="10">10</th><th data-pos="9">9</th><th data-pos="8">8</th><th data-pos="7">7</th><th data-pos="6">6</th><th data-pos="5">5</th><th data-pos="4">4</th><th data-pos="3">3</th><th data-pos="2">2</th><th data-pos="1">1</th><th data-pos="0">0</th></tr>
+                    <tr><td data-pos="15">—</td><td data-pos="14">—</td><td data-pos="13">—</td><td data-pos="12">—</td><td data-pos="11">OF</td><td data-pos="10">DF</td><td data-pos="9">IF</td><td data-pos="8">TF</td><td data-pos="7">SF</td><td data-pos="6">ZF</td><td data-pos="5">—</td><td data-pos="4">AF</td><td data-pos="3">—</td><td data-pos="2">PF</td><td data-pos="1">—</td><td data-pos="0">CF</td></tr>
+                </table>
+            </details>
+            <details open="open" id="r-f32">
+                <summary>Banderas (EFLAGS)</summary>
+                <table>
+                    <tr><th data-reg="31">31</th><th data-pos="30">30</th><th data-pos="29">29</th><th data-pos="28">28</th><th data-pos="27">27</th><th data-pos="26">26</th><th data-pos="25">25</th><th data-pos="24">24</th><th data-pos="23">23</th><th data-pos="22">22</th><th data-pos="21">21</th><th data-pos="20">20</th><th data-pos="19">19</th><th data-pos="18">18</th><th data-pos="17">17</th><th data-pos="16">16</th></tr>
+                    <tr><td data-pos="31">—</td><td data-pos="30">—</td><td data-pos="29">—</td><td data-pos="28">—</td><td data-pos="27">—</td><td data-pos="26">—</td><td data-pos="25">—</td><td data-pos="24">—</td><td data-pos="23">—</td><td data-pos="22">—</td><td data-pos="21">ID</td><td data-pos="20">VIP</td><td data-pos="19">VIF</td><td data-pos="18">AC</td><td data-pos="17">VM</td><td data-pos="16">RF</td></tr>
+                    <tr><th data-pos="15">15</th><th data-pos="14">14</th><th colspan="2" data-pos="12">13 12</th><th data-pos="11">11</th><th data-pos="10">10</th><th data-pos="9">9</th><th data-pos="8">8</th><th data-pos="7">7</th><th data-pos="6">6</th><th data-pos="5">5</th><th data-pos="4">4</th><th data-pos="3">3</th><th data-pos="2">2</th><th data-pos="1">1</th><th data-pos="0">0</th></tr>
+                    <tr><td data-pos="15">—</td><td data-pos="14">NT</td><td colspan="2" data-pos="12">IOPL</td><td data-pos="11">OF</td><td data-pos="10">DF</td><td data-pos="9">IF</td><td data-pos="8">TF</td><td data-pos="7">SF</td><td data-pos="6">ZF</td><td data-pos="5">—</td><td data-pos="4">AF</td><td data-pos="3">—</td><td data-pos="2">PF</td><td data-pos="1">—</td><td data-pos="0">CF</td></tr>
+                </table>
+            </details>
+            <details open="open" id="r-exp">
+                <summary>Detalles</summary>
+                <div></div>
+            </details>
+        </main>
+        <footer>
+            <ul aria-label="Entorno">
+                <li class="hint--top" aria-label="Modo de operación"></li>
+                <li class="hint--top" aria-label="Memoria total"></li>
+                <li class="hint--top" aria-label="Tema"></li>
+            </ul>
+            <ul aria-label="Archivo">
+                <li class="hint--top-left" aria-label="Tamaño">650 bytes</li>
+                <li class="hint--top-left" aria-label="Línea">10</li>
+                <li class="hint--top-left" aria-label="Columna">20</li>
+            </ul>
+        </footer>
+        <dialog id="dlgOpc">
+            <form method="dialog">
+                <h2>Opciones</h2>
+                <div>
+                    <label for="txtMemDisp">Memoria principal (máximo 1 MB): </label><input type="number" id="txtMemDisp" max="1024" size="4" value="1024" />
+                    <select id="cmbMemDispUni">
+                        <option value="b" selected="selected">bytes</option>
+                        <option value="kb">kilobytes</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="cmbModoOp">Modo de operación: </label>
+                    <select id="cmbModoOp">
+                        <option value="16" selected="selected">Real (16 bits)</option>
+                        <option value="32f">Protegido, memoria plana (32 bits)</option>
+                        <option value="32s" disabled="disabled">Protegido, memoria segmentada (32 bits)</option>
+                        <option value="64" disabled="disabled">Grande (64 bits)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="cmbColor">Esquema de color: </label>
+                    <select id="cmbColor">
+                        <option value="p" selected="selected">Del sistema</option>
+                        <option value="c">Claro</option>
+                        <option value="o">Oscuro</option>
+                    </select>
+                </div>
+                <footer>
+                    <button type="button" id="btnDlgCerrar">Cerrar</button><!--
+                    <button type="reset">Predeterminado</button>-->
+                </footer>
+            </form>
+        </dialog>
+    </body>
+</html>
