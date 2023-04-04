@@ -54,7 +54,7 @@ function utf32beAunicode(hex){
 function valorSignado(hex){
     var n = parseInt(hex, 16);
     var b = 2**(hex.length*4);
-    return (n >= b/2)?("-"+(b-n).toString(16)):hex;
+    return (n >= b/2)?("-"+(b-n).toString()):n.toString();
 }
 
 /* Generadores de funciones */
@@ -76,33 +76,38 @@ function getObtenerTablaBit(e){
 function getObtenerTablaRegistro(valor){
 }
 
+function genCaracterEspecial(valor){
+    return String.fromCharCode(9216+valor) + " ("+window.pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
+}
+
 // FIX: Evitar imprmir puntos de código 127 o 0-31
 function getObtenerTablaDato(valor){
     var t = valor.length;
     var n = parseInt(valor, 16);
+
     var d = {
         "Tamaño de dato": t.toString(),
         "Binario": "0b"+n.toString(2).padStart(t*4, "0"),
         "Octal": ((n>0)?"0":"")+n.toString(8),
         "Decimal": n.toString(),
-        "UTF-8": unicodeAcar(utf8Aunicode(valor)),
+        "UTF-8": (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf8Aunicode(valor)),
     }
     if (t == 2){
         d["C int8_t"] = valorSignado(valor);
         d["C uint8_t"] = n.toString();
-        d["US-ASCII"] = (n==127)?"␡ (Delete)":(n>127)?"<i>Sin valor</i>":(n<32)?String.fromCharCode(n):String.fromCharCode(9216+n)+"("+window.pumahat.cadenas["c"+n]+")";
+        d["US-ASCII"] = (n==127||n<32)?genCaracterEspecial(n):(n>127)?"<i>Sin valor</i>":String.fromCodePoint(n);
     }
     else if (t == 4){
-        d["UTF-16LE"] = unicodeAcar(utf16leAunicode(valor));
-        d["UTF-16BE"] = unicodeAcar(utf16beAunicode(valor));
+        d["UTF-16LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16leAunicode(valor));
+        d["UTF-16BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16beAunicode(valor));
         d["C int16_t"] = valorSignado(valor);
         d["C uint16_t"] = n.toString();
     }
     else if (t == 8){
-        d["UTF-16LE"] = unicodeAcar(utf16leAunicode(valor));
-        d["UTF-16BE"] = unicodeAcar(utf16beAunicode(valor));
-        d["UTF-32LE"] = unicodeAcar(utf32leAunicode(valor));
-        d["UTF-32BE"] = unicodeAcar(utf32beAunicode(valor));
+        d["UTF-16LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16leAunicode(valor));
+        d["UTF-16BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16beAunicode(valor));
+        d["UTF-32LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf32leAunicode(valor));
+        d["UTF-32BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf32beAunicode(valor));
         d["C int32_t"] = valorSignado(valor);
         d["C uint32_t"] = n.toString();
     };
@@ -111,7 +116,6 @@ function getObtenerTablaDato(valor){
         cad += "<dt>"+e[0]+"</dt><dd>"+e[1]+"</dd>";
     });
     cad += "</dl>";
-    console.log(cad);
     return cad;
 }
 
@@ -213,12 +217,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
         e.addEventListener("click",  (e2) => {
             var cl = e2.target.classList.contains("uno");
             if (cl){
-                e.target.classList.remove("uno");
-                e.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e.target.parentNode.children, e.target)].classList.remove("uno");
+                e2.target.classList.remove("uno");
+                e2.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e2.target.parentNode.children, e2.target)].classList.remove("uno");
             }
             else {
-                e.target.classList.add("uno");
-                e.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e.target.parentNode.children, e.target)].classList.add("uno");
+                e2.target.classList.add("uno");
+                e2.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e2.target.parentNode.children, e2.target)].classList.add("uno");
             }
         });
     });
