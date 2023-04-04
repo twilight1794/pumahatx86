@@ -6,7 +6,7 @@ function unicodeAcar(cp){
     if (cp != null){
         return String.fromCodePoint(cp);
     } else {
-        return "<i>Cadena inválida</i>";
+        return "<i>Caracter inválido</i>";
     }
 }
 function utf8Aunicode(hex){
@@ -80,7 +80,6 @@ function genCaracterEspecial(valor){
     return String.fromCharCode(9216+valor) + " ("+window.pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
 }
 
-// FIX: Evitar imprmir puntos de código 127 o 0-31
 function getObtenerTablaDato(valor){
     var t = valor.length;
     var n = parseInt(valor, 16);
@@ -95,7 +94,7 @@ function getObtenerTablaDato(valor){
     if (t == 2){
         d["C int8_t"] = valorSignado(valor);
         d["C uint8_t"] = n.toString();
-        d["US-ASCII"] = (n==127||n<32)?genCaracterEspecial(n):(n>127)?"<i>Sin valor</i>":String.fromCodePoint(n);
+        d["US-ASCII"] = (n==127||n<32)?genCaracterEspecial(n):(n>127)?"<i>Caracter inválido</i>":String.fromCodePoint(n);
     }
     else if (t == 4){
         d["UTF-16LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16leAunicode(valor));
@@ -179,7 +178,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     window.pumahat.g = {
         dlgOpc: document.getElementById("dlgOpc"),
         footer: document.getElementsByTagName("footer")[0],
-        pan: document.getElementById("r-exp").children[1],
+        pan: document.getElementById("pan"),
+        panst: document.getElementById("panst"),
         txtMemDisp: document.getElementById("txtMemDisp"),
         txtMemDispUni: document.getElementById("cmbMemDispUni"),
         cmbModoOp: document.getElementById("cmbModoOp"),
@@ -226,7 +226,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             }
         });
     });
-    Array.from(document.querySelectorAll("#r-mem td, #r-ip td, #r-rpg td, #r-seg td")).forEach((e) => {
+    Array.from(document.querySelectorAll("#r-mem li, #r-ip td, #r-rpg td, #r-seg td")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
             if (!e2.target.classList.contains("grupo")){
                 window.pumahat.g.pan.innerHTML = getObtenerTablaDato(e2.target.textContent);
