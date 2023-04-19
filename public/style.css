@@ -1,10 +1,10 @@
 :root {
     --i-ejecutar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M320 853V293l440 280-440 280Z"/></svg>');
-    --i-resumir: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M240 816V336h60v480h-60Zm174 0 385-240-385-240v480Z"/></svg>');
+    --i-avanzar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M240 816V336h60v480h-60Zm174 0 385-240-385-240v480Z"/></svg>');
     --i-detener: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M240 816V336h480v480H240Z"/></svg>');
     --i-abrir: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M878 977 750 849v125h-60V746h228v60H792l128 128-42 43ZM520 456h220L520 236v220ZM220 976q-24 0-42-18t-18-42V236q0-24 18-42t42-18h340l240 240v270H630v290H220Z"/></svg>');
     --i-guardar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M840 373v503q0 24-18 42t-42 18H180q-24 0-42-18t-18-42V276q0-24 18-42t42-18h503l157 157ZM479.765 811Q523 811 553.5 780.735q30.5-30.264 30.5-73.5Q584 664 553.735 633.5q-30.264-30.5-73.5-30.5Q437 603 406.5 633.265q-30.5 30.264-30.5 73.5Q376 750 406.265 780.5q30.264 30.5 73.5 30.5ZM233 472h358V329H233v143Z"/></svg>');
-    --i-cerrar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>');
+    --i-restablecer: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>');
     --i-opciones: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="m388 976-20-126q-19-7-40-19t-37-25l-118 54-93-164 108-79q-2-9-2.5-20.5T185 576q0-9 .5-20.5T188 535L80 456l93-164 118 54q16-13 37-25t40-18l20-127h184l20 126q19 7 40.5 18.5T669 346l118-54 93 164-108 77q2 10 2.5 21.5t.5 21.5q0 10-.5 21t-2.5 21l108 78-93 164-118-54q-16 13-36.5 25.5T592 850l-20 126H388Zm92-270q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38Z"/></svg>');
 }
 * {
@@ -15,25 +15,26 @@
 }
 @media (prefers-color-scheme: dark){
     :root {
+        /*c=texto, f=fondo, act=:active, ts=sombra*/
+        /*m=main, a=accent, t=(cosas como footer)), d=deshabilitado?, band=bandera, b=botónregular*/
         --c-m: #323232;
         --f-m: whitesmoke;
         --c-a: whitesmoke;
-        --act-a: gray;
-        --f-a: #011169;
+        --act-a: #39ff14;
+        --f-a: #4b0081;
         --c-t: whitesmoke;
         --f-t: #323232;
         --act-t: gray;
         --f-d: gray;
+        --f-b: lightgray;
         --ts-band: gray;
-        --f-band: yellow;
+        --f-band: #39ff14;
     }
 }
 html {
     height: 100%;
 }
 body {
-    display: flex;
-    flex-direction: column;
     width: 100%;
     height: 100%;
     font-family: 'Calibri', sans-serif;
@@ -71,45 +72,94 @@ body>header [aria-label="Acciones"] button {
     height: 3rem;
     aspect-ratio: 1;
 }
-body>header [aria-label="Acciones"] button:active {
+body>header [aria-label="Acciones"] button:active:not(:disabled) {
     background-color: var(--act-a);
 }
+body>header [aria-label="Acciones"] button:disabled {
+    background-color: var(--f-d);
+}
 #btnEjecutar { mask-image: var(--i-ejecutar); }
-#btnResumir { mask-image: var(--i-resumir); }
+#btnAvanzar { mask-image: var(--i-avanzar); }
 #btnDetener { mask-image: var(--i-detener); }
 #btnAbrir { mask-image: var(--i-abrir); }
 #btnGuardar { mask-image: var(--i-guardar); }
-#btnCerrar { mask-image: var(--i-cerrar);}
+#btnRestablecer { mask-image: var(--i-restablecer);}
 #btnOpc { mask-image: var(--i-opciones); }
 main {
-    flex-grow: 1;
-    display: grid;
+    display: flex;
+    height: calc(100% - 7rem);
     gap: .5rem;
     margin: .5rem;
-    grid-template-columns: 1fr 1fr .5fr /*auto*/;
-    grid-template-rows: repeat(5, auto) 1fr;
 }
-#r-cod { grid-area: 1 / 1 / 7 / 2; }
-#r-cod ol {
+main>div {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+main>div:nth-child(1) { width: calc((100% - 27rem) * .4); }
+main>div:nth-child(2) { width: calc((100% - 27rem) * .6); }
+main>div:nth-child(3) { width: 27rem; }
+:is(#r-ay, #r-hist, #r-mem) > div {
+    padding: .5rem;
+}
+#r-ay ul {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 2rem);
+    gap: .5rem;
+}
+#r-ay li {
+    width: 2rem;
+    height: 2rem;
+}
+#r-ay button {
+    width: 100%;
+    height: 100%;
+    font-size: x-small;
+}
+#r-ay button:active {
+    background: var(--f-b);
+}
+#r-ent .dp {
+    color: var(--f-a);
+}
+#r-ent .breakpoints {
+    width: .8rem;
+}
+/*#r-ent [role=textbox] {
+    width: 100%;
+    min-height: 6rem;
+    max-height: calc(100vh - 26rem);
+    overflow: auto;
+    font-family: monospace;
+    font-size: larger;
+    line-height: 1.2rem;
+}
+#r-ent [role=textbox]:focus {
+    outline: 0px var(--f-a) solid;
+}
+#r-hist ol {
     list-style-type: none;
     font-family: 'Courier New', 'Courier', monospace;
 }
-#r-cod li {
+#r-hist li, #r-ent [role=textbox] div {
     counter-increment: linea;
 }
-#r-cod li .inst::before {
-    background: var(--act-a);
-    content: counter(linea) " ";
-}
-#r-mem { grid-area: 1 / 2 / 7 / 3; }
-#r-mem > div {
-    margin: .5rem;
-}
-#r-mem > ol {
+#r-hist li .inst::before, #r-ent [role=textbox] div::before {
+    background: var(--f-a);
+    color: var(--c-a);
+    content: counter(linea);
+    padding-inline: .5rem;
+    margin-right: .5rem;
+    font-weight: bold;
+}*/
+#r-mem ol {
     list-style-type: none;
     padding: .5rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, 2rem);
+    overflow-y: scroll;
+    max-height: calc(100vh - 12rem);
 }
 #r-mem li {
     display: inline-block;
@@ -118,58 +168,48 @@ main {
     text-align: center;
     padding-top: 10px;
 }
-#r-ip  { grid-area: 1 / 3 / 2 / 4; }
-#r-rpg { grid-area: 2 / 3 / 3 / 4; }
-#r-seg { grid-area: 3 / 3 / 4 / 4; }
-#r-f16 { grid-area: 4 / 3 / 5 / 4; }
-#r-f32 { grid-area: 5 / 3 / 6 / 4; }
 #r-f16 .uno, #r-f32 .uno {
     font-weight: bold;
     text-shadow: var(--ts-band) 1px 1px 2px;
     background: var(--f-band);
 }
 #r-exp {
-    grid-area: 6 / 3 / 7 / 4;
     overflow-y: scroll;
 }
 #r-exp > div {
     position: relative;
-    /*padding: .5rem;*/
     width: 100%;
     height: calc(100% - 26px);
 }
 #pan, #panst {
-    position: absolute;
-    top: .5rem;
-    left: .5rem;
-    width: calc(100% - 1rem);
-    height: calc(100% - 26px - 1rem);
+    padding: .5rem;
     background: var(--f-m);
 }
 #pan:empty, #panst:empty { display: none; }
-main>details {
+main>div>details {
     border: 4px solid var(--f-a);
 }
-main>details summary {
+main>div>details summary {
     padding: 4px;
     color: var(--c-a);
     background: var(--f-a);
+    font-weight: bold;
 }
-main>details[disabled] {
+main>div>details[disabled] {
   border-color: var(--f-d);
 }
-main>details[disabled] summary {
+main>div>details[disabled] summary {
   pointer-events: none;
   user-select: none;
   background: var(--f-d);
 }
-main>details table {
+main>div>details table {
     text-align: center;
     -border: 1px solid;
     border-collapse: collapse;
     -width: 100%;
 }
-main>details th, main>details td{
+main>div>details th, main>div>details td{
     padding: 4px;
     border: 1px solid;
 }
@@ -213,6 +253,12 @@ body>footer>ul li:hover {
 }
 #dlgOpc label {
     padding-left: 0;
+}
+dl:not(.natural) dt {
+    font-weight: bold;
+}
+dl:not(.natural) dd {
+    padding-left: .5rem;
 }
 dl.natural>* {
     display: inline;

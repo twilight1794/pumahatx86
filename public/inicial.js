@@ -4,7 +4,7 @@
 /* TODO: 32-bit floating point */
 function unicodeAcar(cp){
     if (cp != null){
-        return String.fromCodePoint(cp);
+        return String.fromCodePoint(parseInt(cp, 16));
     } else {
         return "<i>Caracter inválido</i>";
     }
@@ -73,19 +73,85 @@ function getObtenerTablaBit(e){
     return cad;
 }
 
-function getObtenerTablaRegistro(valor){
+function getValorRegistro(r){
+    switch (r){
+        case "IP":
+            return document.getElementById("v-ip").textContent;
+        case "EIP":
+            return document.getElementById("v-eip").textContent+document.getElementById("v-ip").textContent;
+        case "AH":
+            return document.getElementById("v-ah").textContent;
+        case "AL":
+            return document.getElementById("v-al").textContent;
+        case "AX":
+            return document.getElementById("v-ah").textContent+document.getElementById("v-al").textContent;
+        case "EAX":
+            return document.getElementById("v-eah").textContent+document.getElementById("v-eal").textContent+document.getElementById("v-ah").textContent+document.getElementById("v-al").textContent;
+        case "CH":
+            return document.getElementById("v-ch").textContent;
+        case "CL":
+            return document.getElementById("v-cl").textContent;
+        case "CX":
+            return document.getElementById("v-ch").textContent+document.getElementById("v-cl").textContent;;
+        case "ECX":
+            return document.getElementById("v-ech").textContent+document.getElementById("v-ecl").textContent+document.getElementById("v-ch").textContent+document.getElementById("v-cl").textContent;
+        case "DH":
+            return document.getElementById("v-dh").textContent;
+        case "DL":
+            return document.getElementById("v-dl").textContent;
+        case "DX":
+            return document.getElementById("v-dh").textContent+document.getElementById("v-dl").textContent;;
+        case "EDX":
+            return document.getElementById("v-edh").textContent+document.getElementById("v-edl").textContent+document.getElementById("v-dh").textContent+document.getElementById("v-dl").textContent;
+        case "BH":
+            return document.getElementById("v-bh").textContent;
+        case "BL":
+            return document.getElementById("v-bl").textContent;
+        case "BX":
+            return document.getElementById("v-bh").textContent+document.getElementById("v-bl").textContent;;
+        case "EBX":
+            return document.getElementById("v-ebh").textContent+document.getElementById("v-ebl").textContent+document.getElementById("v-bh").textContent+document.getElementById("v-bl").textContent;
+        case "SP":
+            return document.getElementById("v-sp").textContent;
+        case "ESP":
+            return document.getElementById("v-esp").textContent+document.getElementById("v-sp").textContent;
+        case "BP":
+            return document.getElementById("v-bp").textContent;
+        case "EBP":
+            return document.getElementById("v-ebp").textContent+document.getElementById("v-bp").textContent;
+        case "DI":
+            return document.getElementById("v-di").textContent;
+        case "EDI":
+            return document.getElementById("v-edi").textContent+document.getElementById("v-di").textContent;
+        case "SI":
+            return document.getElementById("v-si").textContent;
+        case "ESI":
+            return document.getElementById("v-esi").textContent+document.getElementById("v-si").textContent;
+        case "CS":
+            return document.getElementById("v-cs").textContent;
+        case "DS":
+            return document.getElementById("v-ds").textContent;
+        case "ES":
+            return document.getElementById("v-es").textContent;
+        case "FS":
+            return document.getElementById("v-fs").textContent;
+        case "GS":
+            return document.getElementById("v-gs").textContent;
+        case "SS":
+            return document.getElementById("v-ss").textContent;
+    }
 }
 
 function genCaracterEspecial(valor){
     return String.fromCharCode(9216+valor) + " ("+window.pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
 }
 
-function getObtenerTablaDato(valor){
+function getObtenerTablaDato(valor, fun, r){
     var t = valor.length;
     var n = parseInt(valor, 16);
-
+    var p = "";
     var d = {
-        "Tamaño de dato": t.toString(),
+        "Tamaño de dato": (t/2).toString() + " byte" + ((t != 2)?"s":""),
         "Binario": "0b"+n.toString(2).padStart(t*4, "0"),
         "Octal": ((n>0)?"0":"")+n.toString(8),
         "Decimal": n.toString(),
@@ -110,7 +176,38 @@ function getObtenerTablaDato(valor){
         d["C int32_t"] = valorSignado(valor);
         d["C uint32_t"] = n.toString();
     };
-    var cad = "<dl class=\"natural\">";
+    if (fun == 1){
+        if (r.length == 3 && r[2] == "X"){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r.substring(1,3)][0] + " (" + window.pumahat.cadenas[r.substring(1,3)][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r.substring(1,3)][2] + "</dd>";
+        } else if (r.length == 2 && r[1] == "X"){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["NN"] + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+        } else if (r[1] == "L"){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["NL"].replace("%s", r.replace("L", "X")) + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("L", "X")][0] + " (" + window.pumahat.cadenas[r.replace("L", "X")][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("L", "X")][2] + "</dd>";
+        } else if (r[1] == "H"){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["NH"].replace("%s", r.replace("H", "X")) + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("H", "X")][0] + " (" + window.pumahat.cadenas[r.replace("H", "X")][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("H", "X")][2] + "</dd>";
+        } else if (r.length == 2 && r[1] == "S"){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+        } else if (r.length == 3 && (r[2] == "P" || r[2] == "I")){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("E", "")][0] + " (" + window.pumahat.cadenas[r.replace("E", "")][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r.replace("E", "")][2] + "</dd>";
+        } else if (r.length == 2 && (r[1] == "P" || r[1] == "I")){
+            p += "<dt>" + r + ": " + window.pumahat.cadenas["NN"] + "</dt>";
+            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+        }
+    }
+    var cad = "<dl>" + p + "</dl><dl class=\"natural\">";
     Object.entries(d).forEach((e) => {
         cad += "<dt>"+e[0]+"</dt><dd>"+e[1]+"</dd>";
     });
@@ -127,19 +224,21 @@ function txtMemDispEvento(i){
         localStorage.setItem("MemDisp", elem.value);
         localStorage.setItem("MemDispUni", elemu.value);
     }
-    footer.querySelector("[aria-label='Memoria total']").textContent = localStorage.getItem("MemDisp")+" "+localStorage.getItem("MemDispUni").toUpperCase();
+    footer.querySelector("[aria-label='Memoria total']").textContent = localStorage.getItem("MemDisp")+" "+((localStorage.getItem("MemDispUni")=="kb")?"KiB":"B");
     var rmem = document.getElementById("r-mem");
     var tam = ((localStorage.getItem("MemDispUni") == "kb")?1024:1)*parseInt(localStorage.getItem("MemDisp"));
-    var delta = tam - rmem.children.length;
+    var celdas = rmem.children[1].children[1];
+    var tama = celdas.children.length;
+    var delta = tam - tama;
     if (delta < 0){
-        for (let i = tam; i<rmem.children.length; i++){
-            tam[i].parentNode.removeChild(tam[i]);
+        for (let i = tam; i < tama; i++){
+            celdas.removeChild(celdas.children[tam]);
         }
     } else {
-        for (let i = 0; i < tam; i++){
+        for (let i = 0; i < delta; i++){
             var li = document.createElement("li");
             li.textContent = "00";
-            rmem.children[2].appendChild(li);
+            celdas.appendChild(li);
         }
     }
 }
@@ -189,15 +288,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
     /* Eventos para configuración */
     pumahat.g.txtMemDisp.addEventListener("change", (e) => {
         if (parseInt(e.target.value) > 1024){ event2.target.value = 1024; }
-        cmbMemDispEvento();
+        txtMemDispEvento(0);
     });
-    pumahat.g.txtMemDispUni.addEventListener("change", () => { cmbMemDispEvento(0); } );
+    pumahat.g.txtMemDispUni.addEventListener("change", () => { txtMemDispEvento(0); } );
     pumahat.g.cmbModoOp.addEventListener("change", () => { cmbModoOpEvento(0); } );
     pumahat.g.cmbColor.addEventListener("change", () => { cmbColorEvento(0); } );
 
     /* Sincronización de configuración */
     var opts = Array.from(dlgOpc.querySelectorAll("select, input")).forEach((elem) => {
-        var prop = elem.id.replace("txt","").replace("cmb","");
+        var prop = elem.id.replace("txt","").replace("cmb", "");
         var ov = localStorage.getItem(prop);
         if (ov){ elem.value = ov; }
         else { localStorage.setItem(prop, elem.value); }
@@ -207,42 +306,129 @@ window.addEventListener("DOMContentLoaded", (event) => {
     cmbColorEvento();
 
     /* Eventos para el panel de ayuda */
-    Array.from(document.querySelectorAll("#r-f16 td, #r-f32 td")).forEach((e) => {
+    Array.from(document.querySelectorAll("#r-f16 th, #r-f16 td, #r-f32 th, #r-f32 td")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
             if (!e2.target.classList.contains("grupo")){
-                window.pumahat.g.pan.innerHTML = getObtenerTablaBit(e2.target);
+                var trg = e2.target;
+                if (e2.target.tagName == "th"){
+                    trg = e2.target.parentNode.parentNode.querySelector("td[data-pos=\""+e2.target.dataset.pos+"\"]");
+                }
+                window.pumahat.g.pan.innerHTML = getObtenerTablaBit(trg);
             }
         });
-        e.addEventListener("mouseout",  (e2) => { window.pumahat.g.pan.textContent = ""; });
-        e.addEventListener("click",  (e2) => {
-            var cl = e2.target.classList.contains("uno");
-            if (cl){
-                e2.target.classList.remove("uno");
-                e2.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e2.target.parentNode.children, e2.target)].classList.remove("uno");
-            }
-            else {
-                e2.target.classList.add("uno");
-                e2.target.parentNode.previousElementSibling.children[Array.prototype.indexOf.call(e2.target.parentNode.children, e2.target)].classList.add("uno");
-            }
+        e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
+        e.addEventListener("click", (e2) => {
+            Array.from(e2.target.parentNode.parentNode.querySelectorAll("[data-pos=\""+e2.target.dataset.pos+"\"]")).forEach((e3) => {
+                if (e3.classList.contains("uno")){ e3.classList.remove("uno"); }
+                else {e3.classList.add("uno");}
+            });
         });
     });
-    Array.from(document.querySelectorAll("#r-mem li, #r-ip td, #r-rpg td, #r-seg td")).forEach((e) => {
+    Array.from(document.querySelectorAll("#r-mem li, #v-eip, #v-ip, #r-rpg td:not(:empty), #r-seg td")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
             if (!e2.target.classList.contains("grupo")){
-                window.pumahat.g.pan.innerHTML = getObtenerTablaDato(e2.target.textContent);
+                window.pumahat.g.pan.innerHTML = getObtenerTablaDato(e2.target.textContent, null);
             }
         });
         e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
     });
+    Array.from(document.querySelectorAll("#t-eip, #t-ip, #r-rpg th:not(:empty), #r-seg th")).forEach((e) => {
+        e.addEventListener("mouseover", (e2) => {
+            window.pumahat.g.pan.innerHTML = getObtenerTablaDato(getValorRegistro(e2.target.textContent), 1, e2.target.textContent);
+        });
+        e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
+    });
+    Array.from(document.querySelectorAll("#r-ay button")).forEach((e) => {
+        e.addEventListener("click", (e2) => {
+            var rango;
+            var sel = window.getSelection();
+            console.log(sel);
+            if (sel.getRangeAt && sel.rangeCount) {
+                rango = sel.getRangeAt(0);
+                rango.deleteContents();
+                rango.insertNode(document.createTextNode(e2.target.value));
+            }
+        });
+    });
 
+    /* CodeMirror */
+    window.pumahat.cmi = CodeMirror(document.querySelector('#codemirror'), {
+        lineNumbers: true,
+        gutters: ["CodeMirror-linenumbers", "breakpoints"],
+        tabSize: 2,
+        value: "xchg ax, ax;"
+    });
+    window.pumahat.cmi.on("gutterClick", function(cm, n){
+        var info = cm.lineInfo(n);
+        cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
+    });
+    function makeMarker() {
+        var marker = document.createElement("u");
+        marker.classList.add("bp");
+        marker.textContent = "●";
+        return marker;
+    }
+    /*
+    cmi.eachLine((t) => {console.log(t);}) -> iterate over each line
+    */
+
+    /* Estado de los botones */
+    document.getElementById("btnDetener").disabled = true;
     /* Funciones para botones */
+    document.getElementById("btnEjecutar").addEventListener("click", (event2) => {
+        window.pumahat.cmi.setOption("readOnly", true);
+        document.getElementById("btnDetener").disabled = false;
+        document.getElementById("btnEjecutar").disabled = true;
+        document.getElementById("btnAvanzar").disabled = true;
+    });
+    document.getElementById("btnAvanzar").addEventListener("click", (event2) => {
+        window.pumahat.cmi.setOption("readOnly", true);
+        document.getElementById("btnDetener").disabled = false;
+        document.getElementById("btnEjecutar").disabled = true;
+        document.getElementById("btnAvanzar").disabled = true;
+    });
+    document.getElementById("btnDetener").addEventListener("click", (event2) => {
+        window.pumahat.cmi.setOption("readOnly", false);
+        document.getElementById("btnDetener").disabled = true;
+        document.getElementById("btnEjecutar").disabled = false;
+        document.getElementById("btnAvanzar").disabled = false;
+        //limpiarProcesador();
+    });
     document.getElementById("btnAbrir").addEventListener("click", (event2) => {
         document.getElementById("archivo").click();
+    });
+    document.getElementById("archivo").addEventListener("change", (event2) => {
+        var file = event2.target.files[0];
+        if (file){
+            var reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = function (event3){
+                window.pumahat.cmi.setValue(event3.target.result);
+            }
+            reader.onerror = function (){
+                console.error("Error leyendo archivo");
+            }
+        }
+    });
+    document.getElementById("btnGuardar").addEventListener("click", (event2) => {
+        var el = document.createElement("a");
+        el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(window.pumahat.cmi.getValue()));
+        el.setAttribute("download", "programa.asmx");
+        el.style.display = 'none';
+        document.body.appendChild(el);
+        el.click();
+        document.body.removeChild(el);
     });
     document.getElementById("btnOpc").addEventListener("click", (event2) => {
         dlgOpc.showModal();
     });
     document.getElementById("btnDlgCerrar").addEventListener("click", (event2) => {
         dlgOpc.close();
+    });
+    document.getElementById("btnRestablecer").addEventListener("click", (event2) => {
+        window.pumahat.cmi.setOption("readOnly", false);
+        //limpiarProcesador();
+        window.pumahat.cmi.setValue();
+        document.getElementById("archivo").value = null;
     });
 });

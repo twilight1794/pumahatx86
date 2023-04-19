@@ -1,6 +1,5 @@
 "use strict"
 
-window.pumahat = {};
 window.pumahat.cadenas = {
     /* nombres ASCII */
     "a00": ["NUL", "Null"],
@@ -167,8 +166,13 @@ window.pumahat.cadenas = {
     "TEST": [],
     "XCHG": [],
     "XOR": [],
+    /* Detalles sobre registros */
+    "NH": "Parte alta del registro %s",
+    "NL": "Parte baja del registro %s",
+    "EN": "Registro de 32 bits",
+    "NN": "Registro de 16 bits",
     /* Registros de propósito general e instrucción */
-    "IP": ["Puntero de instrucción", "Ins"],
+    "IP": ["Puntero de instrucción", "Instruction Pointer", "Apuntador a la próxima instrucción a ejecutar."],
     "AX": ["Registro acumulador", "Accumulator register", "Es usado en operaciones aritméticas."],
     "CX": ["Registro contador", "Counter register", "Es usado en ciclos e instrucciones de rotación."],
     "DX": ["Registro de datos", "Data register", "Es usado en operaciones aritméticas y de E/S."],
@@ -189,7 +193,7 @@ window.pumahat.cadenas = {
     "PF": ["Bandera de paridad", "Parity Flag", "Se activa si el número de bits marcados en el byte menos significativo es par"],
     "AF": ["Bandera de ajuste", "Adjust Flag", "Como la bandera de acarreo, pero para operaciones con BCD"],
     "ZF": ["Bandera de cero", "Zero Flag", "Se activa si el resultado de una operación es 0"],
-    "SF": ["Bandera de signo", "Sign Flag", "Se acriva si el resultado de una operación es negativo"],
+    "SF": ["Bandera de signo", "Sign Flag", "Se activa si el resultado de una operación es negativo"],
     "TF": ["Bandera de trampa", "Trap Flag", "Se activa en procesos de depuración paso-a-paso"],
     "IF": ["Bandera de interrupción", "Interruption Flag", "Se activa si se admiten interrupciones"],
     "DF": ["Bandera de dirección", "Direction Flag", "Si está activada, las operaciones con cadenas se harán decrementando el puntero, posibilitando operar con ellas de fin a inicio"],
