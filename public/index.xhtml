@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/monokai.min.css" integrity="sha512-R6PH4vSzF2Yxjdvb2p2FA06yWul+U0PDDav4b/od/oXf9Iw37zl10plvwOXelrjV2Ai7Eo3vyHeyFUjhXdBCVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
         <script>/*<![CDATA[*/window.pumahat = {};/*]]>*/</script>
-        <script src="ast.js"></script>
         <script src="interprete.js"></script>
         <script src="cadenas.js"></script>
         <script src="inicial.js" defer="defer"></script>
@@ -63,27 +62,27 @@
                 </details>
                 <details open="open" id="r-ent">
                     <summary>Entrada</summary>
-                    <div><div id="codemirror"></div><!--<div role="textbox" contenteditable="true" aria-label="Comando a introducir" spellcheck="false">Yoon Se-ri</div>--></div>
-                </details><!--
-                <details open="open" id="r-hist">
-                    <summary>Entrada</summary>
-                    <div>
-                        <ol>
-                            <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">mov al, 2</span></li>
-                            <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">add [170], al</span></li>
-                            <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">mov al, 3</span></li>
-                            <li><input type="checkbox" aria-label="Breakpoint" /><span class="inst">add [170], al</span></li>
-                        </ol>
-                    </div>
-                </details>-->
+                    <div><div id="codemirror"></div></div>
+                </details>
+                <details open="open" id="r-err" hidden="hidden">
+                    <summary>Errores</summary>
+                    <div></div>
+                </details>
             </div>
             <div>
                 <details open="open" id="r-mem">
                     <summary>Memoria</summary>
                     <div>
-                        <div><label for="locdir">Ir a: </label><input type="text" id="locdir" pattern="[A-Fa-f0-9]+" placeholder="0x..." /><button>Ir</button></div>
+                        <div class="barra"><label for="locdir">Ir a: </label><input type="text" id="locdir" pattern="[A-Fa-f0-9]+" placeholder="0x..." /><button>Ir</button></div>
                         <ol>
                         </ol>
+                    </div>
+                </details>
+                <details open="open" id="r-var">
+                    <summary>Variables y etiquetas</summary>
+                    <div>
+                        <dl class="lvars">
+                        </dl>
                     </div>
                 </details>
             </div>
@@ -91,9 +90,9 @@
                 <details open="open" id="r-ip">
                     <summary>Puntero de instrucción</summary>
                     <table>
-                        <tr><th colspan="2" id="t-eip">EIP</th><th scope="col" colspan="2">Instrucción actual</th><td colspan="2">MOV ax, ax</td></tr>
-                        <tr><th></th><th id="t-ip">IP</th><th scope="col" colspan="2">Próxima instrucción</th><td colspan="2">XCHG ax, cx</td></tr>
-                        <tr><td id="v-eip">0000</td><td id="v-ip">0000</td><th scope="col">Tamaño</th><td>2 bytes</td><td colspan="2">Instrucción <output id="numInst">4</output> de <output id="numTot">23</output></td></tr>
+                        <tr><th colspan="2" id="t-eip">EIP</th><th scope="col" colspan="2">Instrucción actual</th><td colspan="2"></td></tr>
+                        <tr><th></th><th id="t-ip">IP</th><th scope="col" colspan="2">Próxima instrucción</th><td colspan="2"></td></tr>
+                        <tr><td id="v-eip">0000</td><td id="v-ip">0000</td><th scope="col">Tamaño</th><td><output id="numTam">—</output> bytes</td><td colspan="2">Instrucción <output id="numInst">—</output> de <output id="numTot">—</output></td></tr>
                     </table>
                 </details>
                 <details open="open" id="r-rpg">
@@ -147,9 +146,9 @@
                 <li class="hint--top" aria-label="Tema"></li>
             </ul>
             <ul aria-label="Archivo">
-                <li class="hint--top-left" aria-label="Tamaño">650 bytes</li>
-                <li class="hint--top-left" aria-label="Línea">línea 10</li>
-                <li class="hint--top-left" aria-label="Columna">columna 20</li>
+                <li class="hint--top-left" aria-label="Tamaño"></li>
+                <li class="hint--top-left" aria-label="Línea"></li>
+                <li class="hint--top-left" aria-label="Columna"></li>
             </ul>
         </footer>
         <dialog id="dlgOpc">

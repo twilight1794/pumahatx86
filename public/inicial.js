@@ -61,8 +61,8 @@ function valorSignado(hex){
 function getObtenerTablaBit(e){
     var bit = e.textContent;
     var cad = undefined;
-    if (bit in window.pumahat.cadenas){
-        var dato = window.pumahat.cadenas[bit];
+    if (bit in pumahat.cadenas){
+        var dato = pumahat.cadenas[bit];
         cad = "<dl class=\"natural\">";
         cad += "<dt>"+dato[0]+" ("+dato[1]+")</dt><dd>"+dato[2]+"</dd>";
         cad += "<dt>Estado</dt><dd>"+((e.classList.contains("uno"))?"Activado":"Desactivado")+"</dd>";
@@ -143,7 +143,7 @@ function getValorRegistro(r){
 }
 
 function genCaracterEspecial(valor){
-    return String.fromCharCode(9216+valor) + " ("+window.pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
+    return String.fromCharCode(9216+valor) + " ("+pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
 }
 
 function getObtenerTablaDato(valor, fun, r){
@@ -178,33 +178,33 @@ function getObtenerTablaDato(valor, fun, r){
     };
     if (fun == 1){
         if (r.length == 3 && r[2] == "X"){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r.substring(1,3)][0] + " (" + window.pumahat.cadenas[r.substring(1,3)][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r.substring(1,3)][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r.substring(1,3)][0] + " (" + pumahat.cadenas[r.substring(1,3)][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r.substring(1,3)][2] + "</dd>";
         } else if (r.length == 2 && r[1] == "X"){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["NN"] + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["NN"] + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r][0] + " (" + pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r][2] + "</dd>";
         } else if (r[1] == "L"){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["NL"].replace("%s", r.replace("L", "X")) + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("L", "X")][0] + " (" + window.pumahat.cadenas[r.replace("L", "X")][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("L", "X")][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["NL"].replace("%s", r.replace("L", "X")) + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r.replace("L", "X")][0] + " (" + pumahat.cadenas[r.replace("L", "X")][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r.replace("L", "X")][2] + "</dd>";
         } else if (r[1] == "H"){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["NH"].replace("%s", r.replace("H", "X")) + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("H", "X")][0] + " (" + window.pumahat.cadenas[r.replace("H", "X")][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("H", "X")][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["NH"].replace("%s", r.replace("H", "X")) + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r.replace("H", "X")][0] + " (" + pumahat.cadenas[r.replace("H", "X")][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r.replace("H", "X")][2] + "</dd>";
         } else if (r.length == 2 && r[1] == "S"){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r][0] + " (" + pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r][2] + "</dd>";
         } else if (r.length == 3 && (r[2] == "P" || r[2] == "I")){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["EN"] + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("E", "")][0] + " (" + window.pumahat.cadenas[r.replace("E", "")][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r.replace("E", "")][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["EN"] + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r.replace("E", "")][0] + " (" + pumahat.cadenas[r.replace("E", "")][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r.replace("E", "")][2] + "</dd>";
         } else if (r.length == 2 && (r[1] == "P" || r[1] == "I")){
-            p += "<dt>" + r + ": " + window.pumahat.cadenas["NN"] + "</dt>";
-            p += "<dd>" + window.pumahat.cadenas[r][0] + " (" + window.pumahat.cadenas[r][1] + ")</dd>";
-            p += "<dd>" + window.pumahat.cadenas[r][2] + "</dd>";
+            p += "<dt>" + r + ": " + pumahat.cadenas["NN"] + "</dt>";
+            p += "<dd>" + pumahat.cadenas[r][0] + " (" + pumahat.cadenas[r][1] + ")</dd>";
+            p += "<dd>" + pumahat.cadenas[r][2] + "</dd>";
         }
     }
     var cad = "<dl>" + p + "</dl><dl class=\"natural\">";
@@ -220,14 +220,13 @@ function txtMemDispEvento(i){
     let footer = pumahat.g.footer;
     let elem = pumahat.g.txtMemDisp;
     let elemu = pumahat.g.txtMemDispUni;
-    if (i == 0){
+    if (i == 0){ // i==0 si el usuario ha actualizado el valor
         localStorage.setItem("MemDisp", elem.value);
         localStorage.setItem("MemDispUni", elemu.value);
     }
     footer.querySelector("[aria-label='Memoria total']").textContent = localStorage.getItem("MemDisp")+" "+((localStorage.getItem("MemDispUni")=="kb")?"KiB":"B");
-    var rmem = document.getElementById("r-mem");
     var tam = ((localStorage.getItem("MemDispUni") == "kb")?1024:1)*parseInt(localStorage.getItem("MemDisp"));
-    var celdas = rmem.children[1].children[1];
+    var celdas = pumahat.g.rmem;
     var tama = celdas.children.length;
     var delta = tam - tama;
     if (delta < 0){
@@ -237,6 +236,15 @@ function txtMemDispEvento(i){
     } else {
         for (let i = 0; i < delta; i++){
             var li = document.createElement("li");
+            if (i != 0){
+                // NOTE: Evaluar utilidad de contains("grupo")
+                li.addEventListener("mouseover", (e) => {
+                    if (!e.target.classList.contains("grupo")){
+                        pumahat.g.pan.innerHTML = getObtenerTablaDato(e.target.textContent, null);
+                    }
+                });
+                li.addEventListener("mouseout", () => { pumahat.g.pan.textContent = ""; });
+            }
             li.textContent = "00";
             celdas.appendChild(li);
         }
@@ -251,13 +259,13 @@ function cmbModoOpEvento(i){
     var r16 = document.getElementById("r-f16");
     var r32 = document.getElementById("r-f32");
     if (elem.value == "16"){
-        r32.open = false; r32.setAttribute("tabindex", "-1"); r32.setAttribute("disabled", "disabled");
-        r16.open = true; r16.removeAttribute("tabindex"); r16.removeAttribute("disabled");
-        rseg.open = true; rseg.removeAttribute("tabindex"); rseg.removeAttribute("disabled");
+        r32.hidden = true;
+        r16.hidden = false;
+        rseg.hidden = false;
     } else if (elem.value == "32f"){
-        r32.open = true; r32.removeAttribute("tabindex"); r32.removeAttribute("disabled");
-        r16.open = false; r16.setAttribute("tabindex", "-1"); r16.setAttribute("disabled", "disabled");
-        rseg.open = false; rseg.setAttribute("tabindex", "-1"); rseg.setAttribute("disabled", "disabled");
+        r32.hidden = false;
+        r16.hidden = true;
+        rseg.hidden = true;
     }
 }
 function cmbColorEvento(i){
@@ -272,17 +280,45 @@ function cmbColorEvento(i){
     }
 }
 
+/* Eventos del editor */
+function onChangeCMI(cm){
+    let t = pumahat.cmi.getValue().length;
+    let u;
+    if (t >= 1000){
+        u = t.toFixed(1) + " KB";
+    } else {
+        u = t + " byte" + (t!=1?"s":"");
+    }
+    document.querySelector("footer [aria-label=Tamaño]").textContent = u;
+}
+function onInputCMI(cm){
+    let c = cm.getCursor();
+    document.querySelector("footer [aria-label=Línea]").textContent = "Línea " + (c.line + 1);
+    document.querySelector("footer [aria-label=Columna]").textContent = "Columna " + (c.ch + 1);
+}
+
 window.addEventListener("DOMContentLoaded", (event) => {
     /* Variables globales */
-    window.pumahat.g = {
+    pumahat.g = {
         dlgOpc: document.getElementById("dlgOpc"),
         footer: document.getElementsByTagName("footer")[0],
-        pan: document.getElementById("pan"),
-        panst: document.getElementById("panst"),
         txtMemDisp: document.getElementById("txtMemDisp"),
         txtMemDispUni: document.getElementById("cmbMemDispUni"),
         cmbModoOp: document.getElementById("cmbModoOp"),
         cmbColor: document.getElementById("cmbColor"),
+        btnEjecutar: document.getElementById("btnEjecutar"),
+        btnAvanzar: document.getElementById("btnAvanzar"),
+        btnDetener: document.getElementById("btnDetener"),
+        rerr: document.querySelector("#r-err>div"),
+        rmem: document.querySelector("#r-mem ol"),
+        lvars: document.getElementsByClassName("lvars")[0],
+        rip: document.querySelector("#r-ip table"),
+        rrpg: document.querySelector("#r-rpg table"),
+        rseg: document.querySelector("#r-seg table"),
+        rf16: document.querySelector("#r-f16 table"),
+        rf32: document.querySelector("#r-f32 table"),
+        pan: document.getElementById("pan"),
+        panst: document.getElementById("panst"),
     };
 
     /* Eventos para configuración */
@@ -295,7 +331,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     pumahat.g.cmbColor.addEventListener("change", () => { cmbColorEvento(0); } );
 
     /* Sincronización de configuración */
-    var opts = Array.from(dlgOpc.querySelectorAll("select, input")).forEach((elem) => {
+    Array.from(dlgOpc.querySelectorAll("select, input")).forEach((elem) => {
         var prop = elem.id.replace("txt","").replace("cmb", "");
         var ov = localStorage.getItem(prop);
         if (ov){ elem.value = ov; }
@@ -313,10 +349,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 if (e2.target.tagName == "th"){
                     trg = e2.target.parentNode.parentNode.querySelector("td[data-pos=\""+e2.target.dataset.pos+"\"]");
                 }
-                window.pumahat.g.pan.innerHTML = getObtenerTablaBit(trg);
+                pumahat.g.pan.innerHTML = getObtenerTablaBit(trg);
             }
         });
-        e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
+        e.addEventListener("mouseout", (e2) => { pumahat.g.pan.textContent = ""; });
         e.addEventListener("click", (e2) => {
             Array.from(e2.target.parentNode.parentNode.querySelectorAll("[data-pos=\""+e2.target.dataset.pos+"\"]")).forEach((e3) => {
                 if (e3.classList.contains("uno")){ e3.classList.remove("uno"); }
@@ -327,38 +363,41 @@ window.addEventListener("DOMContentLoaded", (event) => {
     Array.from(document.querySelectorAll("#r-mem li, #v-eip, #v-ip, #r-rpg td:not(:empty), #r-seg td")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
             if (!e2.target.classList.contains("grupo")){
-                window.pumahat.g.pan.innerHTML = getObtenerTablaDato(e2.target.textContent, null);
+                pumahat.g.pan.innerHTML = getObtenerTablaDato(e2.target.textContent, null);
             }
         });
-        e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
+        e.addEventListener("mouseout", (e2) => { pumahat.g.pan.textContent = ""; });
     });
     Array.from(document.querySelectorAll("#t-eip, #t-ip, #r-rpg th:not(:empty), #r-seg th")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
-            window.pumahat.g.pan.innerHTML = getObtenerTablaDato(getValorRegistro(e2.target.textContent), 1, e2.target.textContent);
+            pumahat.g.pan.innerHTML = getObtenerTablaDato(getValorRegistro(e2.target.textContent), 1, e2.target.textContent);
         });
-        e.addEventListener("mouseout", (e2) => { window.pumahat.g.pan.textContent = ""; });
+        e.addEventListener("mouseout", (e2) => { pumahat.g.pan.textContent = ""; });
     });
     Array.from(document.querySelectorAll("#r-ay button")).forEach((e) => {
         e.addEventListener("click", (e2) => {
-            var rango;
-            var sel = window.getSelection();
-            console.log(sel);
-            if (sel.getRangeAt && sel.rangeCount) {
-                rango = sel.getRangeAt(0);
-                rango.deleteContents();
-                rango.insertNode(document.createTextNode(e2.target.value));
+            var sel = pumahat.cmi.getSelection();
+            if (sel.length > 0){
+                pumahat.cmi.replaceSelection(e2.target.value);
+            } else {
+                var doc = pumahat.cmi.getDoc();
+                var cursor = doc.getCursor();
+                doc.replaceRange(e2.target.value, cursor);
             }
         });
     });
 
+
+    /* Eventos para paneles */
+
+
     /* CodeMirror */
-    window.pumahat.cmi = CodeMirror(document.querySelector('#codemirror'), {
+    pumahat.cmi = CodeMirror(document.querySelector('#codemirror'), {
         lineNumbers: true,
         gutters: ["CodeMirror-linenumbers", "breakpoints"],
-        tabSize: 2,
-        value: "xchg ax, ax;"
+        tabSize: 2
     });
-    window.pumahat.cmi.on("gutterClick", function(cm, n){
+    pumahat.cmi.on("gutterClick", (cm, n) => {
         var info = cm.lineInfo(n);
         cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
     });
@@ -368,31 +407,46 @@ window.addEventListener("DOMContentLoaded", (event) => {
         marker.textContent = "●";
         return marker;
     }
-    /*
-    cmi.eachLine((t) => {console.log(t);}) -> iterate over each line
-    */
+    pumahat.cmi.on("change", onChangeCMI);
+    pumahat.cmi.on("cursorActivity", onInputCMI);
+    onChangeCMI(pumahat.cmi);
+    onInputCMI(pumahat.cmi);
 
     /* Estado de los botones */
-    document.getElementById("btnDetener").disabled = true;
+    pumahat.g.btnDetener.disabled = true;
     /* Funciones para botones */
-    document.getElementById("btnEjecutar").addEventListener("click", (event2) => {
-        window.pumahat.cmi.setOption("readOnly", true);
-        document.getElementById("btnDetener").disabled = false;
-        document.getElementById("btnEjecutar").disabled = true;
-        document.getElementById("btnAvanzar").disabled = true;
+    pumahat.g.btnEjecutar.addEventListener("click", (event2) => {
+        pumahat.cmi.setOption("readOnly", true);
+        pumahat.g.btnDetener.disabled = false;
+        pumahat.g.btnEjecutar.disabled = true;
+        pumahat.g.btnAvanzar.disabled = true;
+        // fun
+        try {
+            pumahat.p = new Programa();
+            pumahat.cmi.eachLine((l) => {
+                pumahat.p.analizar(l.text, 1);
+            });
+            pumahat.p.ejecutar();
+        } catch (err) {
+            // FIX: hacer más didáctico esto de los errores
+            pumahat.g.rerr.parentNode.hidden = false;
+            pumahat.g.rerr.textContent = err.message;
+        }
     });
-    document.getElementById("btnAvanzar").addEventListener("click", (event2) => {
-        window.pumahat.cmi.setOption("readOnly", true);
-        document.getElementById("btnDetener").disabled = false;
-        document.getElementById("btnEjecutar").disabled = true;
-        document.getElementById("btnAvanzar").disabled = true;
+    pumahat.g.btnAvanzar.addEventListener("click", (event2) => {
+        pumahat.cmi.setOption("readOnly", true);
+        pumahat.g.btnDetener.disabled = false;
+        pumahat.g.btnEjecutar.disabled = true;
+        pumahat.g.btnAvanzar.disabled = true;
+        pumahat.g.rerr.parentNode.hidden = true;
     });
-    document.getElementById("btnDetener").addEventListener("click", (event2) => {
-        window.pumahat.cmi.setOption("readOnly", false);
-        document.getElementById("btnDetener").disabled = true;
-        document.getElementById("btnEjecutar").disabled = false;
-        document.getElementById("btnAvanzar").disabled = false;
-        //limpiarProcesador();
+    pumahat.g.btnDetener.addEventListener("click", (event2) => {
+        pumahat.cmi.setOption("readOnly", false);
+        pumahat.g.btnDetener.disabled = true;
+        pumahat.g.btnEjecutar.disabled = false;
+        pumahat.g.btnAvanzar.disabled = false;
+        pumahat.p.limpiar();
+        pumahat.p = undefined;
     });
     document.getElementById("btnAbrir").addEventListener("click", (event2) => {
         document.getElementById("archivo").click();
@@ -403,7 +457,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             var reader = new FileReader();
             reader.readAsText(file, "UTF-8");
             reader.onload = function (event3){
-                window.pumahat.cmi.setValue(event3.target.result);
+                pumahat.cmi.setValue(event3.target.result);
             }
             reader.onerror = function (){
                 console.error("Error leyendo archivo");
@@ -412,9 +466,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
     document.getElementById("btnGuardar").addEventListener("click", (event2) => {
         var el = document.createElement("a");
-        el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(window.pumahat.cmi.getValue()));
+        el.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(pumahat.cmi.getValue()));
         el.setAttribute("download", "programa.asmx");
-        el.style.display = 'none';
+        el.style.display = "none";
         document.body.appendChild(el);
         el.click();
         document.body.removeChild(el);
@@ -426,9 +480,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         dlgOpc.close();
     });
     document.getElementById("btnRestablecer").addEventListener("click", (event2) => {
-        window.pumahat.cmi.setOption("readOnly", false);
-        //limpiarProcesador();
-        window.pumahat.cmi.setValue();
+        pumahat.cmi.setOption("readOnly", false);
+        pumahat.p.limpiar();
+        pumahat.cmi.setValue();
         document.getElementById("archivo").value = null;
     });
 });

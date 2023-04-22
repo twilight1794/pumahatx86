@@ -16,7 +16,7 @@
 @media (prefers-color-scheme: dark){
     :root {
         /*c=texto, f=fondo, act=:active, ts=sombra*/
-        /*m=main, a=accent, t=(cosas como footer)), d=deshabilitado?, band=bandera, b=botónregular*/
+        /*m=main, a=accent, t=(cosas como footer), d=deshabilitado?, band=bandera, b=botónregular*/
         --c-m: #323232;
         --f-m: whitesmoke;
         --c-a: whitesmoke;
@@ -99,7 +99,7 @@ main>div {
 main>div:nth-child(1) { width: calc((100% - 27rem) * .4); }
 main>div:nth-child(2) { width: calc((100% - 27rem) * .6); }
 main>div:nth-child(3) { width: 27rem; }
-:is(#r-ay, #r-hist, #r-mem) > div {
+:is(#r-ay, #r-err, #r-mem, #r-var) > div {
     padding: .5rem;
 }
 #r-ay ul {
@@ -120,39 +120,13 @@ main>div:nth-child(3) { width: 27rem; }
 #r-ay button:active {
     background: var(--f-b);
 }
-#r-ent .dp {
+#r-ent .bp {
+    text-decoration: none;
     color: var(--f-a);
 }
 #r-ent .breakpoints {
     width: .8rem;
 }
-/*#r-ent [role=textbox] {
-    width: 100%;
-    min-height: 6rem;
-    max-height: calc(100vh - 26rem);
-    overflow: auto;
-    font-family: monospace;
-    font-size: larger;
-    line-height: 1.2rem;
-}
-#r-ent [role=textbox]:focus {
-    outline: 0px var(--f-a) solid;
-}
-#r-hist ol {
-    list-style-type: none;
-    font-family: 'Courier New', 'Courier', monospace;
-}
-#r-hist li, #r-ent [role=textbox] div {
-    counter-increment: linea;
-}
-#r-hist li .inst::before, #r-ent [role=textbox] div::before {
-    background: var(--f-a);
-    color: var(--c-a);
-    content: counter(linea);
-    padding-inline: .5rem;
-    margin-right: .5rem;
-    font-weight: bold;
-}*/
 #r-mem ol {
     list-style-type: none;
     padding: .5rem;
@@ -194,14 +168,6 @@ main>div>details summary {
     color: var(--c-a);
     background: var(--f-a);
     font-weight: bold;
-}
-main>div>details[disabled] {
-  border-color: var(--f-d);
-}
-main>div>details[disabled] summary {
-  pointer-events: none;
-  user-select: none;
-  background: var(--f-d);
 }
 main>div>details table {
     text-align: center;
@@ -273,4 +239,29 @@ dl.natural dt::after {
 dl.natural dd::after {
     display: block;
     content: ' ';
+}
+.barra {
+    display: flex;
+    align-items: baseline;
+}
+.barra > * {
+    padding: .5rem;
+}
+.barra label {
+    font-weight: bold;
+}
+.barra input {
+    flex-grow: 1;
+}
+.barra button {
+    margin-left: .5rem;
+}
+.lvars [data-tipo="Cadena"]{ --dtipo: "Cadena"; }
+.lvars [data-tipo="Entero"]{ --dtipo: "Entero"; }
+.lvars [data-tipo="Caracter"]{ --dtipo: "Caracter"; }
+.lvars dt::after {
+    margin-left: 1ch;
+    content: "(" var(--dtipo) ")";
+    filter: opacity(.6);
+    font-style: italic;
 }
