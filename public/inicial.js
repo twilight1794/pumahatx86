@@ -3,8 +3,13 @@
 /* Utilidades de conversión Unicode */
 /* TODO: 32-bit floating point */
 function unicodeAcar(cp){
+    var n = parseInt(cp, 16);
     if (cp != null){
-        return String.fromCodePoint(parseInt(cp, 16));
+        if (n == 127 || n < 32){
+            return String.fromCharCode(9216 + n) + " (" + pumahat.cadenas["a" + n.toString(16).padStart(2, '0')].join(", ") + ")";
+        } else {
+            return String.fromCodePoint(n);
+        }
     } else {
         return "<i>Caracter inválido</i>";
     }
@@ -38,16 +43,18 @@ function utf16beAunicode(hex){
     if (hex.length == 4){
         return hex;
     } else if (hex.length == 8 && b.slice(0, 6) == "110110" && b.slice(16, 22) == "110111"){
-        return (parseInt(b.slice(6, 16) + b.slice(22, 32), 2)+0x10000).toString(16);
+        var t = (parseInt(b.slice(6, 16) + b.slice(22, 32), 2)+0x10000).toString(16);
+        return t;
     } else {
         return null;
     }
 }
 function utf32leAunicode(hex){
-    return hex.match(/.{2}/g).reverse.join("");
+    var t = hex.match(/.{2}/g).reverse().join("");
+    return (parseInt(t, 16) > 0x10FFFF)?null:t;
 }
 function utf32beAunicode(hex){
-    return hex;
+    return (parseInt(hex, 16) > 0x10FFFF)?null:hex;
 }
 
 /* Utilidades de números con y sin signo */
@@ -73,106 +80,33 @@ function getObtenerTablaBit(e){
     return cad;
 }
 
-function getValorRegistro(r){
-    switch (r){
-        case "IP":
-            return document.getElementById("v-ip").textContent;
-        case "EIP":
-            return document.getElementById("v-eip").textContent+document.getElementById("v-ip").textContent;
-        case "AH":
-            return document.getElementById("v-ah").textContent;
-        case "AL":
-            return document.getElementById("v-al").textContent;
-        case "AX":
-            return document.getElementById("v-ah").textContent+document.getElementById("v-al").textContent;
-        case "EAX":
-            return document.getElementById("v-eah").textContent+document.getElementById("v-eal").textContent+document.getElementById("v-ah").textContent+document.getElementById("v-al").textContent;
-        case "CH":
-            return document.getElementById("v-ch").textContent;
-        case "CL":
-            return document.getElementById("v-cl").textContent;
-        case "CX":
-            return document.getElementById("v-ch").textContent+document.getElementById("v-cl").textContent;;
-        case "ECX":
-            return document.getElementById("v-ech").textContent+document.getElementById("v-ecl").textContent+document.getElementById("v-ch").textContent+document.getElementById("v-cl").textContent;
-        case "DH":
-            return document.getElementById("v-dh").textContent;
-        case "DL":
-            return document.getElementById("v-dl").textContent;
-        case "DX":
-            return document.getElementById("v-dh").textContent+document.getElementById("v-dl").textContent;;
-        case "EDX":
-            return document.getElementById("v-edh").textContent+document.getElementById("v-edl").textContent+document.getElementById("v-dh").textContent+document.getElementById("v-dl").textContent;
-        case "BH":
-            return document.getElementById("v-bh").textContent;
-        case "BL":
-            return document.getElementById("v-bl").textContent;
-        case "BX":
-            return document.getElementById("v-bh").textContent+document.getElementById("v-bl").textContent;;
-        case "EBX":
-            return document.getElementById("v-ebh").textContent+document.getElementById("v-ebl").textContent+document.getElementById("v-bh").textContent+document.getElementById("v-bl").textContent;
-        case "SP":
-            return document.getElementById("v-sp").textContent;
-        case "ESP":
-            return document.getElementById("v-esp").textContent+document.getElementById("v-sp").textContent;
-        case "BP":
-            return document.getElementById("v-bp").textContent;
-        case "EBP":
-            return document.getElementById("v-ebp").textContent+document.getElementById("v-bp").textContent;
-        case "DI":
-            return document.getElementById("v-di").textContent;
-        case "EDI":
-            return document.getElementById("v-edi").textContent+document.getElementById("v-di").textContent;
-        case "SI":
-            return document.getElementById("v-si").textContent;
-        case "ESI":
-            return document.getElementById("v-esi").textContent+document.getElementById("v-si").textContent;
-        case "CS":
-            return document.getElementById("v-cs").textContent;
-        case "DS":
-            return document.getElementById("v-ds").textContent;
-        case "ES":
-            return document.getElementById("v-es").textContent;
-        case "FS":
-            return document.getElementById("v-fs").textContent;
-        case "GS":
-            return document.getElementById("v-gs").textContent;
-        case "SS":
-            return document.getElementById("v-ss").textContent;
-    }
-}
-
-function genCaracterEspecial(valor){
-    return String.fromCharCode(9216+valor) + " ("+pumahat.cadenas["a"+valor.toString(16).padStart(2, '0')].join(", ")+")";
-}
-
 function getObtenerTablaDato(valor, fun, r){
     var t = valor.length;
     var n = parseInt(valor, 16);
     var p = "";
     var d = {
         "Tamaño de dato": (t/2).toString() + " byte" + ((t != 2)?"s":""),
-        "Binario": "0b"+n.toString(2).padStart(t*4, "0"),
-        "Octal": ((n>0)?"0":"")+n.toString(8),
+        "Binario": "0b" + n.toString(2).padStart(t*4, "0"),
+        "Octal": ((n>0)?"0":"") + n.toString(8),
         "Decimal": n.toString(),
-        "UTF-8": (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf8Aunicode(valor)),
+        "UTF-8": unicodeAcar(utf8Aunicode(valor)),
     }
     if (t == 2){
         d["C int8_t"] = valorSignado(valor);
         d["C uint8_t"] = n.toString();
-        d["US-ASCII"] = (n==127||n<32)?genCaracterEspecial(n):(n>127)?"<i>Caracter inválido</i>":String.fromCodePoint(n);
+        d["US-ASCII"] = (n>127)?"<i>Caracter inválido</i>":unicodeAcar(n);
     }
     else if (t == 4){
-        d["UTF-16LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16leAunicode(valor));
-        d["UTF-16BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16beAunicode(valor));
+        d["UTF-16LE"] = unicodeAcar(utf16leAunicode(valor));
+        d["UTF-16BE"] = unicodeAcar(utf16beAunicode(valor));
         d["C int16_t"] = valorSignado(valor);
         d["C uint16_t"] = n.toString();
     }
     else if (t == 8){
-        d["UTF-16LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16leAunicode(valor));
-        d["UTF-16BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf16beAunicode(valor));
-        d["UTF-32LE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf32leAunicode(valor));
-        d["UTF-32BE"] = (n==127||n<32)?genCaracterEspecial(n):unicodeAcar(utf32beAunicode(valor));
+        d["UTF-16LE"] = unicodeAcar(utf16leAunicode(valor));
+        d["UTF-16BE"] = unicodeAcar(utf16beAunicode(valor));
+        d["UTF-32LE"] = unicodeAcar(utf32leAunicode(valor));
+        d["UTF-32BE"] = unicodeAcar(utf32beAunicode(valor));
         d["C int32_t"] = valorSignado(valor);
         d["C uint32_t"] = n.toString();
     };
@@ -297,6 +231,24 @@ function onInputCMI(cm){
     document.querySelector("footer [aria-label=Columna]").textContent = "Columna " + (c.ch + 1);
 }
 
+function ejecutarInterprete(vel){
+    try {
+        if (pumahat.p == undefined){
+            pumahat.p = new Programa();
+            pumahat.cmi.eachLine((l) => {
+                pumahat.p.analizar(l.text, l.lineNo()+1);
+            });
+        }
+        if (vel == 0) pumahat.p.ejecutar();
+        else pumahat.p.avanzar();
+    } catch (err) {
+        // FIX: hacer más didáctico esto de los errores
+        pumahat.g.rerr.parentNode.hidden = false;
+        pumahat.g.rerr.textContent = err.message;
+        throw err;
+    }
+}
+
 window.addEventListener("DOMContentLoaded", (event) => {
     /* Variables globales */
     pumahat.g = {
@@ -320,6 +272,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         pan: document.getElementById("pan"),
         panst: document.getElementById("panst"),
     };
+    pumahat.pl = new Plataforma();
 
     /* Eventos para configuración */
     pumahat.g.txtMemDisp.addEventListener("change", (e) => {
@@ -370,7 +323,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
     Array.from(document.querySelectorAll("#t-eip, #t-ip, #r-rpg th:not(:empty), #r-seg th")).forEach((e) => {
         e.addEventListener("mouseover", (e2) => {
-            pumahat.g.pan.innerHTML = getObtenerTablaDato(getValorRegistro(e2.target.textContent), 1, e2.target.textContent);
+            var t = getObtenerTablaDato(pumahat.pl.leerRegistro(e2.target.textContent, 1), 1, e2.target.textContent);
+            pumahat.g.pan.innerHTML = t;
         });
         e.addEventListener("mouseout", (e2) => { pumahat.g.pan.textContent = ""; });
     });
@@ -386,10 +340,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
             }
         });
     });
-
-
-    /* Eventos para paneles */
-
 
     /* CodeMirror */
     pumahat.cmi = CodeMirror(document.querySelector('#codemirror'), {
@@ -420,18 +370,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         pumahat.g.btnDetener.disabled = false;
         pumahat.g.btnEjecutar.disabled = true;
         pumahat.g.btnAvanzar.disabled = true;
-        // fun
-        try {
-            pumahat.p = new Programa();
-            pumahat.cmi.eachLine((l) => {
-                pumahat.p.analizar(l.text, 1);
-            });
-            pumahat.p.ejecutar();
-        } catch (err) {
-            // FIX: hacer más didáctico esto de los errores
-            pumahat.g.rerr.parentNode.hidden = false;
-            pumahat.g.rerr.textContent = err.message;
-        }
+        ejecutarInterprete(0);
+        pumahat.g.btnEjecutar.disabled = false;
+        pumahat.g.btnAvanzar.disabled = false;
     });
     pumahat.g.btnAvanzar.addEventListener("click", (event2) => {
         pumahat.cmi.setOption("readOnly", true);
@@ -439,6 +380,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
         pumahat.g.btnEjecutar.disabled = true;
         pumahat.g.btnAvanzar.disabled = true;
         pumahat.g.rerr.parentNode.hidden = true;
+        ejecutarInterprete(1);
+        pumahat.g.btnEjecutar.disabled = false;
+        pumahat.g.btnAvanzar.disabled = false;
     });
     pumahat.g.btnDetener.addEventListener("click", (event2) => {
         pumahat.cmi.setOption("readOnly", false);
@@ -481,8 +425,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
     document.getElementById("btnRestablecer").addEventListener("click", (event2) => {
         pumahat.cmi.setOption("readOnly", false);
-        pumahat.p.limpiar();
-        pumahat.cmi.setValue();
+        if (pumahat.p) pumahat.p.limpiar();
+        pumahat.p == undefined;
+        pumahat.cmi.setValue("");
         document.getElementById("archivo").value = null;
     });
 });

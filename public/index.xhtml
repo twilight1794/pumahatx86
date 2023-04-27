@@ -5,9 +5,9 @@
         <title>x86Pumahat</title>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <link rel="stylesheet" type="text/css" href="hint.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/monokai.min.css" integrity="sha512-R6PH4vSzF2Yxjdvb2p2FA06yWul+U0PDDav4b/od/oXf9Iw37zl10plvwOXelrjV2Ai7Eo3vyHeyFUjhXdBCVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="codemirror.min.css" />
+        <link rel="stylesheet" type="text/css" href="monokai.min.css" />
+        <script src="codemirror.min.js"></script>
         <script>/*<![CDATA[*/window.pumahat = {};/*]]>*/</script>
         <script src="interprete.js"></script>
         <script src="cadenas.js"></script>
@@ -19,13 +19,13 @@
             <h1>x86Pumahat</h1>
             <input type="file" id="archivo" hidden="hidden" aria-labelledby="btnAbrir" accept=".asmx" />
             <ul aria-label="Acciones">
-                <li aria-label="Ejecutar"><button id="btnEjecutar">Ejecutar</button></li>
-                <li aria-label="Ejecutar una instrucción"><button id="btnAvanzar">Ejecutar una instrucción</button></li>
-                <li aria-label="Detener"><button id="btnDetener">Detener ejecución</button></li>
-                <li aria-label="Abrir..."><button id="btnAbrir">Abrir archivo</button></li>
-                <li aria-label="Guardar..."><button id="btnGuardar">Guardar archivo</button></li>
-                <li aria-label="Restablecer"><button id="btnRestablecer">Restablecer</button></li>
-                <li aria-label="Opciones"><button id="btnOpc">Opciones</button></li>
+                <li class="hint--bottom" aria-label="Ejecutar"><button id="btnEjecutar">Ejecutar</button></li>
+                <li class="hint--bottom" aria-label="Ejecutar una instrucción"><button id="btnAvanzar">Ejecutar una instrucción</button></li>
+                <li class="hint--bottom" aria-label="Detener"><button id="btnDetener">Detener ejecución</button></li>
+                <li class="hint--bottom" aria-label="Abrir..."><button id="btnAbrir">Abrir archivo</button></li>
+                <li class="hint--bottom" aria-label="Guardar..."><button id="btnGuardar">Guardar archivo</button></li>
+                <li class="hint--bottom" aria-label="Restablecer"><button id="btnRestablecer">Restablecer</button></li>
+                <li class="hint--bottom" aria-label="Opciones"><button id="btnOpc">Opciones</button></li>
             </ul>
             <ul>
                 <li><a href="https://lidsol.org/courses/pumahat/">PumaHat</a></li><!--
@@ -90,8 +90,8 @@
                 <details open="open" id="r-ip">
                     <summary>Puntero de instrucción</summary>
                     <table>
-                        <tr><th colspan="2" id="t-eip">EIP</th><th scope="col" colspan="2">Instrucción actual</th><td colspan="2"></td></tr>
-                        <tr><th></th><th id="t-ip">IP</th><th scope="col" colspan="2">Próxima instrucción</th><td colspan="2"></td></tr>
+                        <tr><th colspan="2" id="t-eip">EIP</th><th scope="col" colspan="2">Instrucción actual</th><td colspan="2" id="instAct">—</td></tr>
+                        <tr><th></th><th id="t-ip">IP</th><th scope="col" colspan="2">Próxima instrucción</th><td colspan="2" id="instProx">—</td></tr>
                         <tr><td id="v-eip">0000</td><td id="v-ip">0000</td><th scope="col">Tamaño</th><td><output id="numTam">—</output> bytes</td><td colspan="2">Instrucción <output id="numInst">—</output> de <output id="numTot">—</output></td></tr>
                     </table>
                 </details>
@@ -101,7 +101,7 @@
                         <tr><th colspan="4" id="t-eax">EAX</th><th colspan="4" id="t-ecx">ECX</th><th colspan="4" id="t-edx">EDX</th><th colspan="4" id="t-ebx">EBX</th></tr>
                         <tr><th colspan="2" rowspan="2"></th><th colspan="2" id="t-ax">AX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-cx">CX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-dx">DX</th><th colspan="2" rowspan="2"></th><th colspan="2" id="t-bx">BX</th></tr>
                         <tr><th id="t-ah">AH</th><th id="t-al">AL</th><th id="t-ch">CH</th><th id="t-cl">CL</th><th id="t-dh">DH</th><th id="t-dl">DL</th><th id="t-bh">BH</th><th id="t-bl">BL</th></tr>
-                        <tr><td id="v-eah">00</td><td id="v-eal">00</td><td id="v-ah">00</td><td id="v-al">00</td><td id="v-ech">00</td><td id="v-ecl">00</td><td id="v-ch">00</td><td id="v-cl">00</td><td id="v-edh">00</td><td id="v-edl">00</td><td id="v-dh">00</td><td id="v-dl">00</td><td id="v-ebh">00</td><td id="v-ebl">00</td><td id="v-bh">00</td><td id="v-bl">00</td></tr>
+                        <tr><td id="v-eah">00</td><td id="v-eal">00</td><td id="v-ah">00</td><td id="v-al">00</td><td id="v-ech">00</td><td id="v-ecl">00</td><td id="v-ch">00</td><td id="v-cl">00</td><td id="v-edh">00</td><td id="v-edl">00</td><td id="v-dh">00</td><td id="v-dl">00</td><td id="v-ebh">00</td><td id="v-ebl">20</td><td id="v-bh">01</td><td id="v-bl">00</td></tr>
                         <tr><th colspan="4" id="t-esp">ESP</th><th colspan="4" id="t-ebp">EBP</th><th colspan="4" id="t-edi">EDI</th><th colspan="4" id="t-esi">ESI</th></tr>
                         <tr><th colspan="2"></th><th colspan="2" id="t-sp">SP</th><th colspan="2"></th><th colspan="2" id="t-bp">BP</th><th colspan="2"></th><th colspan="2" id="t-di">DI</th><th colspan="2"></th><th colspan="2" id="t-si">SI</th></tr>
                         <tr><td colspan="2" id="v-esp">0000</td><td colspan="2" id="v-sp">0000</td><td colspan="2" id="v-ebp">0000</td><td colspan="2" id="v-bp">0000</td><td colspan="2" id="v-edi">0000</td><td colspan="2" id="v-di">0000</td><td colspan="2" id="v-esi">0000</td><td colspan="2" id="v-si">0000</td></tr>
